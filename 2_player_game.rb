@@ -1,47 +1,58 @@
-player_1_life = 3
-player_2_life = 3
-turn = 1
-player = 1
+def last_player_check(player)
+  if player == 1
+    player = 2
+  elsif player == 2
+    player = 1
+  end
+end
 
-game_over = false
-while !game_over
+def generate_random_numbers
   num1 = rand(11)
   num2 = rand(11)
-  if turn == 1
-    player = 1
-    turn = 2
-  else
-    player = 2
-    turn = 1
-  end
-  puts "Player #{player}: What does #{num1} plus #{num2} equal?"
-  answer = gets.to_i
+  return num1, num2
+end
+
+def sum(num1, num2)
   sum = num1 + num2
-  if answer != sum
-    puts "Wrong!"
-    if player == 1
-      player_1_life -= 1
-      puts "Player #{player} life: #{player_1_life}"
-      if player_1_life == 0
-        puts "Player #{player} lost."
-        game_over = true
-      end
-    else
-      player_2_life -= 1
-      puts "Player #{player} life: #{player_2_life}"
-      if player_2_life == 0
-        puts "Player #{player} lost."
-        game_over = true
-      end
+end
+
+def generate_question(player_name, num1, num2)
+  puts "#{player_name}: What does #{num1} plus #{num2} equal?"
+  gets.to_i
+end
+
+def verify_answer(player_answer, correct_answer)
+  player_answer == correct_answer
+end
+
+def lives_check(current_player)
+player_lives = @players.select { |player| player }[current_player][:lives]
+end
+
+
+@players = [{ name: "Player 1", lives: 3 }, { name: "Player 2", lives: 3 }]
+game_over = false
+current_player = 0
+
+
+while !game_over
+  num1, num2 = generate_random_numbers
+  player_name = @players.select { |player| player }[current_player][:name]
+  player_answer = generate_question(player_name, num1, num2)
+  correct_answer = sum(num1, num2)
+  verified = verify_answer(player_answer, correct_answer)
+  if !verified
+    @players.select { |player| player }[current_player][:lives] -= 1
+    lives = lives_check(current_player)
+    puts "Wrong! #{player_name} has #{lives} lives left."
+    if lives == 0
+      game_over = true
+      puts "Game over. #{player_name} loses."
     end
-  end  
+  else
+    lives = lives_check(current_player)
+    puts "Correct! #{player_name} still has #{lives} lives left."
+  end
+  current_player = (current_player + 1) % 2
 end
 
-def generate_question
-end
-
-def prompt_player_for_answer
-end
-
-def verify_answer
-end
