@@ -1,11 +1,3 @@
-def last_player_check(player)
-  if player == 1
-    player = 2
-  elsif player == 2
-    player = 1
-  end
-end
-
 def generate_random_numbers
   num1 = rand(11)
   num2 = rand(11)
